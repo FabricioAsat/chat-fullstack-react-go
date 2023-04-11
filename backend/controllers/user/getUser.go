@@ -6,8 +6,9 @@ import (
 
 	"github.com/FabricioAsat/chat-app-go-react/collection"
 	"github.com/FabricioAsat/chat-app-go-react/database"
-	"github.com/FabricioAsat/chat-app-go-react/models"
 	"github.com/gofiber/fiber/v2"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func GetUser(c *fiber.Ctx) error {
@@ -16,10 +17,19 @@ func GetUser(c *fiber.Ctx) error {
 	userCollection := collection.GetCollection(DB, "Users")
 	defer cancel()
 
-	user := new(models.UserModel)
+	user := bson.M{}
+
+	// Obtengo el id de los paramas, y transformo a un objID
 	id := c.Params("id")
+	objID, _ := primitive.ObjectIDFromHex(id)
 
-	// En progresooo
+	err := userCollection.FindOne(ctx, bson.M{"_id": objID}).Decode(&user)
 
-	return nil
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": err})
+	}
+
+	delete(user, "password")
+
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{"data": user})
 }

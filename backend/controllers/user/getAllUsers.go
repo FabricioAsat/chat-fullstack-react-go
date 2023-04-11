@@ -6,7 +6,6 @@ import (
 
 	"github.com/FabricioAsat/chat-app-go-react/collection"
 	"github.com/FabricioAsat/chat-app-go-react/database"
-	"github.com/FabricioAsat/chat-app-go-react/models"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -26,14 +25,14 @@ func GetAllUsers(c *fiber.Ctx) error {
 	}
 
 	// Variable donde se almacenan todos los users
-	var allUsers []models.UserModel
+	var allUsers []bson.M
 
 	if err := cursor.All(ctx, &allUsers); err != nil {
 		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"message": "Error en la copia de datos"})
 	}
 
 	for index := range allUsers {
-		allUsers[index].Password = "SuperSecret"
+		delete(allUsers[index], "password")
 	}
 
 	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{"data": allUsers})
