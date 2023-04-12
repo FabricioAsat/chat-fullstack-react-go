@@ -7,8 +7,8 @@ import logo from "../assets/svg/logo.svg";
 
 export const LayoutLogReg = ({ children }) => {
 	return (
-		<div className={`w-full max-w-7xl mx-auto h-full grid grid-cols-2`}>
-			<article className="flex flex-col justify-start gap-y-10 bg-blue-700 p-5">
+		<div className={`w-full max-w-7xl mx-auto h-full grid grid-cols-2 bg-neutral-950`}>
+			<article className="flex flex-col justify-start gap-y-10 bg-blue-700 p-5 rounded-r-3xl select-none">
 				<span className="flex justify-center items-end text-4xl font-bold my-10">
 					Ch
 					<img src={logo} alt="Easy" className="h-7 pb-px" />

@@ -17,11 +17,12 @@ export const Register = () => {
 
 	return (
 		<LayoutLogReg>
-			<span className="flex flex-col items-center justify-between">
-				<h2 className="text-4xl font-bold">Registrarse</h2>
+			<span className="flex flex-col items-start max-w-md mx-auto">
+				<h2 className="text-4xl font-bold">Create una cuenta</h2>
 				<i className="text-xl text-sky-500 font-bold">Es fácil y gratis</i>
+				<hr className="border-b-2 border-neutral-800 w-24 my-2" />
 			</span>
-			<form className="flex flex-col gap-y-6 py-10 max-w-md w-full mx-auto">
+			<form className="flex flex-col gap-y-6 pt-10 max-w-md w-full mx-auto">
 				<span className="flex flex-col">
 					<label htmlFor="username" className="font-bold mb-3">
 						Nombre de usuario <b className="text-red-500">*</b>
@@ -90,12 +91,12 @@ export const Register = () => {
 					<input
 						type="submit"
 						value="Crear cuenta"
-						className=" bg-sky-500 text-neutral-950 w-64 py-2 my-5 font-bold rounded-lg text-lg cursor-pointer"
+						className=" bg-sky-500 text-neutral-950 w-64 py-2 my-5 font-bold rounded-lg text-lg cursor-pointer hover:brightness-75"
 					/>
 					<nav className="py-2">
 						<p className="text-base text-center font-semibold">
 							Ya tienes una cuenta? {" | "}
-							<Link to={"/login"} className="text-sky-500 font-bold">
+							<Link to={"/login"} className="text-sky-500 font-bold hover:brightness-75">
 								Iniciar sesión
 							</Link>
 						</p>
