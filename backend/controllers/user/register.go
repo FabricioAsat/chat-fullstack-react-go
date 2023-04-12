@@ -20,7 +20,7 @@ import (
 func Register(c *fiber.Ctx) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	DB := database.ConnectDB()
-	usersCollection := collection.GetCollection(DB, "Users")
+	userCollection := collection.GetCollection(DB, "Users")
 	defer cancel()
 
 	newUser := new(models.UserModel)
@@ -35,7 +35,7 @@ func Register(c *fiber.Ctx) error {
 		Options: options.Index().SetUnique(true),
 	}
 	// Verifica y retorna un error si es que existe otro email en la db
-	if _, err := usersCollection.Indexes().CreateOne(ctx, emailIndex); err != nil || !services.EmailValidator(newUser.Email) {
+	if _, err := userCollection.Indexes().CreateOne(ctx, emailIndex); err != nil || !services.EmailValidator(newUser.Email) {
 		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"message": err})
 	}
 
@@ -52,10 +52,11 @@ func Register(c *fiber.Ctx) error {
 	}
 
 	// Inserto el usuario en la db
-	insertResult, err := usersCollection.InsertOne(ctx, userPayload)
+	insertResult, err := userCollection.InsertOne(ctx, userPayload)
+
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": err})
 	}
 
-	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{"_id": insertResult.InsertedID})
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{"_id": insertResult.InsertedID, "username": userPayload.Username, "email": userPayload.Email})
 }
