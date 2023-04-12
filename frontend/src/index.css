@@ -3,6 +3,5 @@
 @tailwind utilities;
 
 :root {
-	@apply bg-neutral-950 text-[#eee];
-	background-image: url("./assets/pattern.webp");
+	@apply bg-[#151515] text-[#eee];
 }
