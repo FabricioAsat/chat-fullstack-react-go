@@ -17,8 +17,13 @@ func GetAllUsers(c *fiber.Ctx) error {
 
 	defer cancel()
 
+	// Obtengo del body (es un POST) un email y traigo todos los users menos el del email dado
+	body := bson.M{}
+	c.BodyParser(&body)
+	filterEmail := bson.M{"email": bson.M{"$ne": body["email"]}}
+
 	// Obtengo el cursor
-	cursor, err := userCollection.Find(ctx, bson.M{})
+	cursor, err := userCollection.Find(ctx, filterEmail)
 
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": err})
@@ -33,6 +38,7 @@ func GetAllUsers(c *fiber.Ctx) error {
 
 	for index := range allUsers {
 		delete(allUsers[index], "password")
+
 	}
 
 	return c.Status(fiber.StatusAccepted).JSON(allUsers)

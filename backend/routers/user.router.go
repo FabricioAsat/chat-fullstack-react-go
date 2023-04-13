@@ -8,9 +8,9 @@ import (
 func UserRouter(app *fiber.App) {
 
 	// Get Methods
-	app.Get("/users", user.GetAllUsers)
 	app.Get("/users/:id", user.GetUser)
 
+	app.Post("/users", user.GetAllUsers)
 	// Post Methods
 	app.Post("/register", user.Register)
 	app.Post("/login", user.Login)

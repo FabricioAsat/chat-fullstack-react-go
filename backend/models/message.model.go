@@ -1,7 +1,8 @@
 package models
 
 type MessageModel struct {
-	Message string
-	Users   string
-	Sender  string
+	IdListener string `bson:"idlistener"`
+	IdSender   string `bson:"idsender"`
+
+	Message string `bson:"message" validate:"required"`
 }
