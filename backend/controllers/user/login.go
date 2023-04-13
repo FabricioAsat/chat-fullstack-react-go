@@ -22,12 +22,10 @@ func Login(c *fiber.Ctx) error {
 
 	user := new(models.UserModel)
 	dbSameUser := new(models.UserModel)
-	responseUser := bson.M{}
 
 	if err := c.BodyParser(&user); err != nil || user.Email == "" || user.Password == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": err})
 	}
-	c.BodyParser(&responseUser)
 
 	err := userCollection.FindOne(ctx, bson.M{"email": strings.ToLower(user.Email)}).Decode(&dbSameUser)
 
@@ -37,10 +35,9 @@ func Login(c *fiber.Ctx) error {
 
 	err = bcrypt.CompareHashAndPassword([]byte(dbSameUser.Password), []byte(user.Password))
 
-	if user.Email != dbSameUser.Email || err != nil {
+	if !strings.EqualFold(strings.ToLower(user.Email), strings.ToLower(dbSameUser.Email)) || err != nil {
 		return c.Status(fiber.StatusNotAcceptable).JSON(fiber.Map{"message": "Invalid email or password"})
 	}
 
-	delete(responseUser, "password")
-	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{"message": "Login successful", "data": responseUser})
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{"email": dbSameUser.Email, "username": dbSameUser.Username})
 }
