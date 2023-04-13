@@ -21,19 +21,19 @@ func GetAllUsers(c *fiber.Ctx) error {
 	cursor, err := userCollection.Find(ctx, bson.M{})
 
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "Error en la busqueda de usuarios"})
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": err})
 	}
 
 	// Variable donde se almacenan todos los users
 	var allUsers []bson.M
 
 	if err := cursor.All(ctx, &allUsers); err != nil {
-		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"message": "Error en la copia de datos"})
+		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"message": err})
 	}
 
 	for index := range allUsers {
 		delete(allUsers[index], "password")
 	}
 
-	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{"data": allUsers})
+	return c.Status(fiber.StatusAccepted).JSON(allUsers)
 }

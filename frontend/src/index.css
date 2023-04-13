@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 :root {
-	@apply bg-[#151515] text-[#eee];
+	@apply bg-[#151515] text-[#eee] font-nunito;
 }
