@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -56,6 +56,11 @@ export const Register = () => {
 	function handleChange(e) {
 		setInputValues({ ...inputValues, [e.target.name]: e.target.value });
 	}
+
+	// Effect
+	useEffect(() => {
+		if (localStorage.getItem("current-user")) navigateTo("/");
+	}, []);
 
 	return (
 		<LayoutLogReg>
