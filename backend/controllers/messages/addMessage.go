@@ -20,6 +20,7 @@ func AddMessage(c *fiber.Ctx) error {
 	if err := c.BodyParser(&message); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(err)
 	}
+	message.CreatedAt = time.Now()
 
 	res, err := messageCollection.InsertOne(ctx, message)
 	if err != nil {

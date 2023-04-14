@@ -10,6 +10,7 @@ func MessageRouter(app *fiber.App) {
 	// Get Methods
 	// Post Methods
 	app.Post("addmessage", messages.AddMessage)
+	app.Post("getmessages", messages.GetAllMessages)
 
 	// Put Methods
 	// Delete Methods

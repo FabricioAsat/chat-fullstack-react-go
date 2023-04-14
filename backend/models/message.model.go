@@ -1,8 +1,11 @@
 package models
 
-type MessageModel struct {
-	IdListener string `bson:"idlistener"`
-	IdSender   string `bson:"idsender"`
+import "time"
 
-	Message string `bson:"message" validate:"required"`
+type MessageModel struct {
+	IdListener string `bson:"idlistener" validate:"required"`
+	IdSender   string `bson:"idsender" validate:"required"`
+
+	Message   string    `bson:"message" validate:"required"`
+	CreatedAt time.Time `bson:"createdat"`
 }
