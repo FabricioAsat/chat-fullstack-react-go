@@ -20,20 +20,21 @@ func GetAllUsers(c *fiber.Ctx) error {
 	// Obtengo del body (es un POST) un email y traigo todos los users menos el del email dado
 	body := bson.M{}
 	c.BodyParser(&body)
-	filterEmail := bson.M{"email": bson.M{"$ne": body["email"]}}
+
+	filterUserById := bson.M{"email": bson.M{"$ne": body["email"]}}
 
 	// Obtengo el cursor
-	cursor, err := userCollection.Find(ctx, filterEmail)
+	cursor, err := userCollection.Find(ctx, filterUserById)
 
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": err})
+		return c.Status(fiber.StatusNotFound).JSON(err)
 	}
 
 	// Variable donde se almacenan todos los users
 	var allUsers []bson.M
 
 	if err := cursor.All(ctx, &allUsers); err != nil {
-		return c.Status(fiber.StatusConflict).JSON(fiber.Map{"message": err})
+		return c.Status(fiber.StatusConflict).JSON(err)
 	}
 
 	for index := range allUsers {

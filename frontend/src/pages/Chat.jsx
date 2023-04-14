@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { getAllUsers } from "../api/getAllUsers";
+import { useNavigate } from "react-router-dom";
 
-// Image
-import userImage from "../assets/svg/userDefault.svg";
+import { getAllUsers } from "../api/getAllUsers";
 import { Contacts } from "../components/Contacts";
 import { ChatContainer } from "../components/ChatContainer";
 
@@ -11,6 +10,8 @@ export const Chat = () => {
 	const [contacts, setContacts] = useState([]);
 	const [currentUser, setCurrentUser] = useState(undefined);
 	const [currentContact, setCurrentContact] = useState(undefined);
+
+	const navigateTo = useNavigate();
 
 	// effects
 	useEffect(() => {
@@ -24,7 +25,7 @@ export const Chat = () => {
 	useEffect(() => {
 		async function getData() {
 			if (!currentUser) return;
-			const response = await getAllUsers(currentUser.email);
+			const response = await getAllUsers({ email: currentUser.email });
 			if (response.status) {
 				setContacts(response.data);
 				return;
@@ -47,7 +48,7 @@ export const Chat = () => {
 				setCurrentContact={setCurrentContact}
 			/>
 
-			<ChatContainer currentContact={currentContact} />
+			<ChatContainer currentContact={currentContact} currentUser={currentUser} />
 		</div>
 	);
 };

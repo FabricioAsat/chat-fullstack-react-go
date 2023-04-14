@@ -1,6 +1,15 @@
+import { useNavigate } from "react-router-dom";
 import userImage from "../assets/svg/userDefault.svg";
+import logout from "../assets/svg/logout.svg";
 
 export const Contacts = ({ contacts, currentUser, setCurrentContact }) => {
+	const navigateTo = useNavigate();
+
+	function handleLogout() {
+		localStorage.clear();
+		navigateTo("/login");
+	}
+
 	if (contacts.length === 0 || !currentUser)
 		return (
 			<article className="relative  col-span-1 flex flex-col overflow-y-auto border-r-2 border-[#151515] animate-pulse">
@@ -25,6 +34,9 @@ export const Contacts = ({ contacts, currentUser, setCurrentContact }) => {
 					<h4 className="text-lg font-bold">{currentUser.username}</h4>
 					<p className="text-xs italic text-sky-400">{currentUser.email}</p>
 				</span>
+				<button onClick={handleLogout} className="my-auto">
+					<img src={logout} alt="Logout" className="w-10" />
+				</button>
 			</div>
 
 			<section className="flex flex-col overflow-y-auto">

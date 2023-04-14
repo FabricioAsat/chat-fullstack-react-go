@@ -3,8 +3,31 @@ import welcome from "../assets/hello.png";
 
 import { ChatInput } from "./ChatInput";
 import { Messages } from "./Messages";
+import { useEffect, useState } from "react";
+import { getMessages } from "../api/getMessages";
+import { toast } from "sonner";
 
-export const ChatContainer = ({ currentContact }) => {
+export const ChatContainer = ({ currentContact, currentUser }) => {
+	const [newMessageSended, setNewMessageSended] = useState(false);
+	const [allMessages, setAllMessages] = useState();
+
+	useEffect(() => {
+		if (!currentContact || !currentUser) return;
+
+		async function getData() {
+			const data = await getMessages({ idsender: currentUser._id, idlistener: currentContact._id });
+
+			if (!data.status) {
+				toast.error("Error con el servidor");
+				return;
+			}
+
+			setAllMessages(data.data);
+		}
+
+		getData();
+	}, [currentContact, newMessageSended]);
+
 	if (!currentContact)
 		return (
 			<article className="col-span-2 flex flex-col select-none">
@@ -20,7 +43,7 @@ export const ChatContainer = ({ currentContact }) => {
 		);
 
 	return (
-		<article className="col-span-2 flex flex-col">
+		<article className="col-span-2 flex flex-col overflow-y-auto">
 			<div className="bg-black/50 px-5 flex items-start gap-x-4 py-5 border-b-2 border-neutral-800">
 				<img src={userImage} alt="Image" className="w-12" />
 				<span className="w-full">
@@ -29,9 +52,14 @@ export const ChatContainer = ({ currentContact }) => {
 				</span>
 			</div>
 
-			<section className="bg-[url(./assets/pattern.webp)] flex flex-col h-full">
-				<Messages />
-				<ChatInput />
+			<section className="bg-[url(./assets/pattern.webp)] flex flex-col h-full overflow-y-auto">
+				<Messages allMessages={allMessages} myId={currentUser._id} />
+				<ChatInput
+					idsender={currentUser._id}
+					idlistener={currentContact._id}
+					setNewMessageSended={setNewMessageSended}
+					newMessageSended={newMessageSended}
+				/>
 			</section>
 		</article>
 	);

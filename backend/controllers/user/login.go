@@ -39,5 +39,5 @@ func Login(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotAcceptable).JSON(fiber.Map{"message": "Invalid email or password"})
 	}
 
-	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{"email": dbSameUser.Email, "username": dbSameUser.Username})
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{"_id": dbSameUser.ID, "email": dbSameUser.Email, "username": dbSameUser.Username})
 }

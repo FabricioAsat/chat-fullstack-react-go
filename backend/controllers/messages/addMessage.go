@@ -17,6 +17,7 @@ func AddMessage(c *fiber.Ctx) error {
 	defer cancel()
 
 	message := new(models.MessageModel)
+
 	if err := c.BodyParser(&message); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(err)
 	}
